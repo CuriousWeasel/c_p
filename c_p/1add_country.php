@@ -1,7 +1,5 @@
 <?PHP
 include '../inc/db.php';     # $host  -  $user  -  $pass  -  $db
-$airports = getFields('tbl_airports','id','1','>');     #   $tbl,$srch,$param,$condition
-$regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$condition
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +18,6 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
 
   <!-- Custom styles for this template-->
   <link href="css/cp-admin.css" rel="stylesheet">
-    
     
   <script type="text/javascript" src="js/plupload/plupload.full.min.js"></script>
 
@@ -45,9 +42,10 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link" href="locations.php">
-              <span>Locations</span>
+              <span data-feather="map-pin"></span>
+              <span>Locations</span> <span class="sr-only">(current)</span>
             </a>
           </li>
 
@@ -55,11 +53,12 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading active">
-        <span>Properties</span> <span class="sr-only">(current)</span>
+      <div class="sidebar-heading">
+        <span data-feather="home"></span>
+        <span>Properties</span>
       </div>
 
-      <ul class="nav2 collapse show">
+      <ul class="nav2">
                  <li class="nav-item">
                     <a class="nav-link" href="#">Rooms</a>
                   </li>
@@ -73,11 +72,9 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
                     <a class="nav-link" href="airports.php">Airports</a>
                   </li>
             </ul>
-      
-      <!-- Divider -->
-      <hr class="sidebar-divider">
         
       <div class="sidebar-heading">
+        <span data-feather="gift"></span>
         <span>Specials</span>
       </div>
 
@@ -85,6 +82,7 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
       <hr class="sidebar-divider">
         
       <div class="sidebar-heading">
+        <span data-feather="list"></span>
         <span>Intineraries</span>
       </div>
 
@@ -94,20 +92,22 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
         
       <!-- Heading -->
       <div class="sidebar-heading">
+        <span data-feather="send"></span>
         <span>Flights</span>
       </div>
 
-              <ul class="nav2 collapse show">
+              <ul class="nav2">
                  <li class="nav-item">
                     <a class="nav-link" href="#">Flight Maps</a>
                   </li>
               </ul>
               
        <div class="sidebar-heading">
+        <span data-feather="file"></span>
         <span>Assets</span>
       </div>
 
-              <ul class="nav2 collapse show">
+              <ul class="nav2">
                  <li class="nav-item">
                     <a class="nav-link" href="#">Images</a>
                   </li>
@@ -157,70 +157,33 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-            <div class="col-md-9">
-              <!-- Page Heading -->
-              <h1 class="h3 mb-2 text-gray-800"><strong>Airports</strong><span style="ml-2 small"> <a href="locations.php" class="d-none d-sm-inline-block btn btn-sm shadow-sm">&laquo; Back</a></span></h1>
 
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800"><strong>Add Country</strong></h1>
 
-              <!-- Regions -->
-                <div class="clearfix"></div>
-                    <p class="mt-3"><strong>Create New Airport</strong></p>
-                    <form action="addairport.php" method="post" id="addairport" name="addairport">
-                        <table class="table mb-5" id="addAirport" width="100%" cellspacing="0">
-                              <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>Region</th>
-                                  <th>Lat</th>
-                                  <th>Long</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                 <tr>
-                                  <td><input name="airport_name" type="text" id="airport_name"></td>
-                                  <td><select name="region_id" id="region_id">
-                                      <option value="0" selected="selected">Select</option>
-                                        <?php $regionSelect = ''; 
-                                            for($c=0;$c<count($regions);$c++){
-                                               $regionSelect .= '<option value="'.$regions[$c]['id'].'">'.$regions[$c]['region_name'].'</option>' ;
-                                            }
-                                            echo ($regionSelect);
-                                        ?>
-                                    </select></td>
-                                  <td><input name="lat" type="text" id="lat"></td>
-                                  <td><input name="long" type="text" id="long"></td>
-                                  <td><input type="submit" value="Add Airport" class="d-sm-inline-block btn btn-sm shadow-sm"></td>
-                                </tr>
-                              </tbody>
-                        </table>
-                    </form>
-                
-                         <table class="table mt-5" id="listAirports" width="100%" cellspacing="0">
-                              <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>Region</th>
-                                  <th>Lat</th>
-                                  <th>Long</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                  
-                                  <?php for($s=0;$s<count($airports);$s++){ #getField($tbl,$fld,$srch,$param)?>
-                                       <tr><td><?=$airports[$s]['airport_name'];?></td>
-                                           <td><?=getField('tbl_regions','region_name','id',$airports[$s]['region_id']);?></td>
-                                           <td><?=$airports[$s]['lat'];?></td>
-                                           <td><?=$airports[$s]['long'];?></td>
-                                           <td><a href="delairport.php?id=<?=$airports[$s]['id'];?>" class="d-none d-sm-inline-block btn btn-sm shadow-sm">Delete</a></td>
-                                       </tr>
-                                  <?php }?>
-                              </tbody>
-                            </table>
-            </div>
-
-        </div>
+            
+          <!-- Countries Row -->
+          <div class="row">
+            <div class="clearfix"></div>
+            <div class="card-body">
+                <form action="addcountry.php" method="POST">
+                    <div class="col-md-2 mb-3">Country Name  :</div><div class="col-md-10 mb-3"><input type="text" name="country_name" id="country_name"></div>
+                    <div class="col-md-2 mb-3">Country Description  :</div><div class="col-md-10 mb-3"><textarea name="country_desc" id="country_desc"></textarea></div>
+                    <div class="col-md-2 mb-3">Country Icon  :</div><div class="col-md-10 mb-3"><input type="text" name="country_icon" id="country_icon"></div>
+                    <div class="col-md-2 mb-3">Country Banner  :</div>
+                  <div class="col-md-10 mb-3"><div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div><div id="container"><a id="pickfiles" href="javascript:;">[Choose File]</a></div></div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" id="country_banner" name="country_banner">
+                        <a href="locations.php" class="btn btn-secondary">Cancel</a>
+                        <input type="submit" value="Add &raquo;" class="btn btn-primary">
+                  </div>
+                    <div class="col-md-12"><img id="banner_image" src="images/blank.gif" alt="Banner Image" style="width:90%;"/></div>
+                </form>
+                </div>
+          </div>
+            
+            
+        <!-- Regions Row --></div>
         <!-- /.container-fluid -->
 
       </div>
@@ -246,7 +209,7 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
+    
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -274,9 +237,68 @@ $regions = getFields('tbl_regions','id','1','>');     #   $tbl,$srch,$param,$con
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/cp-admin.js"></script>
 
+<script src="js/dashboard.js"></script>
+  <script src="js/cp-admin.js"></script>
+<script type="text/javascript">
+
+var uploader = new plupload.Uploader({
+	runtimes : 'html5,flash,silverlight,html4',
+	browse_button : 'pickfiles',
+	container: document.getElementById('container'),
+	url : 'upload.php?tbl=tbl_country',
+	flash_swf_url : 'js/plupload/Moxie.swf',
+	silverlight_xap_url : '.js/plupload/Moxie.xap',
+	unique_names : true,
+	filters : {
+		max_file_size : '10mb',
+		mime_types: [
+			{title : "Image files", extensions : "jpg,gif,png"}
+		]
+	},
+
+	init: {
+		PostInit: function() {
+			document.getElementById('filelist').innerHTML = '';
+		},
+
+		FilesAdded: function(up, files) {
+			plupload.each(files, function(file) {
+				document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+			});
+            uploader.start();
+		},
+
+		UploadProgress: function(up, file) {
+			document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+		},
+        
+        FileUploaded: function(up, file, info) {
+            var myData;
+				try {
+					myData = eval(info.response);
+				} catch(err) {
+					myData = eval('(' + info.response + ')');
+				}
+            
+           $( "#country_banner" ).val(myData.result);
+            
+            $("#country_image").attr("src", myData.result);
+            console.log(' <img src="'+myData.result+'" alt="Banner Image" style="width:90%;"/>');
+        },
+
+
+		Error: function(up, err) {
+			document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+		}
+	}
+});
+    
+
+
+uploader.init();
+
+</script>
 </body>
 
 </html>

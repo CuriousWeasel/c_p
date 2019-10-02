@@ -65,7 +65,7 @@ include '../inc/db.php';     # $host  -  $user  -  $pass  -  $db
                     <a class="nav-link" href="#">Activities</a>
                   </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Airports</a>
+                    <a class="nav-link" href="airports.php">Airports</a>
                   </li>
             </ul>
         

@@ -70,7 +70,7 @@ $info = getFields('tbl_countries','id',$country_id);
                     <a class="nav-link" href="#">Activities</a>
                   </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Airports</a>
+                    <a class="nav-link" href="airports.php">Airports</a>
                   </li>
             </ul>
         
