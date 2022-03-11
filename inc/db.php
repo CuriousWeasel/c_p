@@ -20,7 +20,20 @@ if($_GET['err']!=""){
 	$pass = "UEyJ.x2Dq";
 	$db	 = "cl13-silverles";
 	$charset = 'utf8mb4';
+/*
+	$host = "localhost";
+    $user = "cps_az";
+    $pass = "CPS_az_321";
+    $db = "cps_az_build3-21";
+    $charset = 'utf8mb4';
 
+
+    $rr_host = "localhost";
+    $rr_user = "cps_az_rr";
+    $rr_pass = "CPS_az_rr_321";
+    $rr_db = "cps_az_build3-21_rr";
+    $rr_charset = 'utf8mb4';
+*/
 
 	##################     / LIVE SERVER     ##########################
 function getTable($tbl,$orderFld = "id"){
@@ -30,7 +43,7 @@ function getTable($tbl,$orderFld = "id"){
 	  $conn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $conn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $result = $conn->prepare("SELECT * FROM $tbl WHERE bl_live = 1 ORDER BY $orderFld ASC "); 
+	  $result = $conn->prepare("SELECT * FROM $tbl WHERE bl_live = 1 ORDER BY $orderFld ASC ");
 	  $result->execute();
 
 	  // Parse returned data
@@ -40,7 +53,7 @@ function getTable($tbl,$orderFld = "id"){
 
 	  $conn = null;        // Disconnect
 	  return $return;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -54,14 +67,14 @@ function getCountries(){
 	  $conn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $conn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $result = $conn->prepare("SELECT * FROM tbl_countries WHERE bl_live > 0 ;"); 
+	  $result = $conn->prepare("SELECT * FROM tbl_countries WHERE bl_live > 0 ;");
 	  $result->execute();
       $return = '';
 	  // Parse returned data
 	  while($row = $result->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
 	  }
-        
+
       // Iterate through the data
       for($a=0;$a<count($data);$a++){
           $regCount = getRegionCount($data[$a]['id']);
@@ -72,7 +85,7 @@ function getCountries(){
 
 	  $conn = null;        // Disconnect
 	  echo $return;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -87,18 +100,18 @@ function getRegions($type = ""){
 	  $conn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $conn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $result = $conn->prepare("SELECT * FROM tbl_regions WHERE bl_live > 0 ;"); 
+	  $result = $conn->prepare("SELECT * FROM tbl_regions WHERE bl_live > 0 ;");
 	  $result->execute();
       $return = '';
 	  // Parse returned data
 	  while($row = $result->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
 	  }
-        
+
       // Iterate through the data
       for($a=0;$a<count($data);$a++){
           if($type=="list"){
-            $return .= '<div class="col-md-2 mb-3">'.$data[$a]['region_name'].' <input name="region'.$data[$a]['id'].'" type="checkbox" id="region'.$data[$a]['id'].'"></div>';  
+            $return .= '<div class="col-md-2 mb-3">'.$data[$a]['region_name'].' <input name="region'.$data[$a]['id'].'" type="checkbox" id="region'.$data[$a]['id'].'"></div>';
           }else{
             $data[$a]['bl_live'] == 2 ? $pending = "<span style='font-weight:bold; margin-right:0.5em; font-size:80%;'>[pending]</span>" : $pending = "";
             $propCount = getPropertyCount($data[$a]['id'],'region_id');
@@ -108,7 +121,7 @@ function getRegions($type = ""){
 
 	  $conn = null;        // Disconnect
 	  echo $return;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -124,13 +137,13 @@ function getRegionCount($id){
 	  $countconn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $countconn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $countresult = $countconn->prepare("SELECT * FROM tbl_regions WHERE country_id = $id AND bl_live > 0 ;"); 
+	  $countresult = $countconn->prepare("SELECT * FROM tbl_regions WHERE country_id = $id AND bl_live > 0 ;");
 	  $countresult->execute();
       $count = $countresult->rowCount();
-      
+
 	  $countconn = null;        // Disconnect
 	  return $count;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -144,13 +157,13 @@ function getPropertyCount($id,$type){
 	  $countconn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $countconn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $countresult = $countconn->prepare("SELECT * FROM tbl_properties WHERE $type = $id AND bl_live > 0 ;"); 
+	  $countresult = $countconn->prepare("SELECT * FROM tbl_properties WHERE $type = $id AND bl_live > 0 ;");
 	  $countresult->execute();
       $count = $countresult->rowCount();
-      
+
 	  $countconn = null;        // Disconnect
 	  return $count;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -165,7 +178,7 @@ function getFields($tbl,$srch,$param,$condition = '='){
 	  $conn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $conn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $result = $conn->prepare("SELECT * FROM $tbl WHERE $srch $condition '$param' AND bl_live > 0;"); 
+	  $result = $conn->prepare("SELECT * FROM $tbl WHERE $srch $condition '$param' AND bl_live > 0;");
 	  $result->execute();
 
 	  // Parse returned data
@@ -175,7 +188,7 @@ function getFields($tbl,$srch,$param,$condition = '='){
 
 	  $conn = null;        // Disconnect
 	  return $return;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -189,7 +202,7 @@ function getField($tbl,$fld,$srch,$param){
 	  $conn = new PDO("mysql:host=$host; dbname=$db", $user, $pass);
 	  $conn->exec("SET CHARACTER SET $charset");      // Sets encoding UTF-8
 
-	  $result = $conn->prepare("SELECT * FROM $tbl WHERE $srch = '$param';"); 
+	  $result = $conn->prepare("SELECT * FROM $tbl WHERE $srch = '$param';");
 	  $result->execute();
 
 	  // Parse returned data
@@ -199,7 +212,7 @@ function getField($tbl,$fld,$srch,$param){
 
 	  $conn = null;        // Disconnect
 	  return $return;
-	
+
 	}
 	catch(PDOException $e) {
 	  echo $e->getMessage();
@@ -209,7 +222,7 @@ function getField($tbl,$fld,$srch,$param){
 
 
 function sps($string, $min='', $max='')
-{	
+{
   $string = str_replace("£","&pound;",$string);
   $string = str_replace("?","&#63;",$string);
   $string = str_replace("'","''",$string);
@@ -222,7 +235,7 @@ function sps($string, $min='', $max='')
 }
 
 function spparanoid($string, $min='', $max='')
-{	
+{
   $string = preg_replace("/[^a-zA-Z0-9_-]/", "", $string);
   $len = strlen($string);
   if((($min != '') && ($len < $min)) || (($max != '') && ($len > $max)))
@@ -236,12 +249,12 @@ function cleanArray($array){
 
 			$value = str_replace("script","scrip t",$value); //no easy javascript injection
 			$value = str_replace("union","uni on",$value); //no easy common mysql temper
-			
+
 			$value = str_replace("'","''",$value); //no single quotes
 
 			$value = htmlentities($value, ENT_QUOTES); //encodes the string nicely
 			$value = addslashes($value); //mysql_real_escape_string() //htmlentities
-			
+
 			$array[$key] = $value;
 		}
 	}else{
@@ -257,7 +270,7 @@ function sanSlash($string){
 }
 
 function onlyNum($string, $min='', $max='')
-{	
+{
   $string = preg_replace("/[^0-9.]/", "", $string);
   $len = strlen($string);
   if((($min != '') && ($len < $min)) || (($max != '') && ($len > $max)))
@@ -307,13 +320,13 @@ $str_time=$my_t['hours'].":".$my_t['minutes'].":".$my_t['seconds'];
 $str_ipaddress=$_SERVER['REMOTE_ADDR'];
 $str_path=$_SERVER['SCRIPT_NAME'];
 $str_pagename = str_replace("","",$str_path);
-$ref = getenv("HTTP_REFERER"); 
+$ref = getenv("HTTP_REFERER");
 cleanArray($_POST);
 foreach($_POST as $key => $data) {
 	if($key!="button"){
 		$svrdata .= $key."=".$data ."   ";
 	}
-} 
+}
 $svrdata .= $_SERVER['QUERY_STRING'];
 $svrdata = sanSlash($svrdata);
 
